@@ -31,5 +31,12 @@ namespace Resumemanager.Controllers
             applicant.Experiences.Add(new Experience() { ExperienceId = 3});
             return View(applicant);
         }
+        public IActionResult Create(Application application)
+        {
+           _context.Add(application);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+
+        }
     }
 }
