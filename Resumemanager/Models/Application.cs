@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Resumemanager.Models
@@ -30,6 +31,8 @@ namespace Resumemanager.Models
         [Range(1,5, ErrorMessage ="Currently we don't have a position with that Experience")]
         [DisplayName("Total Experience Years")]
         public int TotalExperience { get; set; }
+
+        public virtual List<Experience> Experiences { get; set;  } = new List<Experience>();
 
 
 
