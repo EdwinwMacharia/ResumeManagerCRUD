@@ -3,19 +3,14 @@
 @{
     ViewData["Title"] = "Create";
 }
-<div class="col-11 mx-auto pt-0">
+<div class="col-11 mx-auto pt-0 p-0">
     <div class="card">
-        <div class="card-header bg-primary text-uppercase text-white">
+        <div class="card-header bg-primary text-uppercase text-white" style="height:45px;">
             <h4>Create Application</h4>
         </div>
-    </div>
-</div>
 
-
-<hr />
-<form enctype="multipart/form-data" asp-action="Create">
-<
-    div class="row">  
+    <form enctype="multipart/form-data" asp-action="Create">
+    <div class="row">  
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
              <div class="col-md-6">
             <div class="form-group">
@@ -57,13 +52,20 @@
                 <div class="form-group col-8 p-0">
                     <label asp-for="ProfilePhoto" class="control-label"></label>
                     <div class="custom-file"> 
-                        <input asp-for="ProfilePhoto" class="custom-file-input" id="customFile" onc />
-
+                        <input asp-for="ProfilePhoto" class="custom-file-input" id="customFile" onchange="document.getElementById('PreviewPhoto').src = window.URL.createObjectURL(this.ProfilePhoto)"/>
+                        <label class="custom-file-label" for="customFile">Choose File</label>
                     </div>
+                    <span asp-validation-for="ProfilePhoto" class="text-danger"></span>
                 </div>
             </div>
 
-            <table class="table">
+            <div class="form-group col-4">
+                <img id="PreviewPhoto" src="images/avatar.png" alt="Logo Image"
+                width="120" height="120" style="border:1px ; margin-top:20px;"/>
+
+            </div>
+            <div class="col-md-12">
+            <table class="table table-striped table-sm">
                 <thead>
                     <tr>
                         <th>
@@ -96,18 +98,29 @@
                        </tr>
                    }
                 </tbody>
-            </table>
+            </table>   
+     </div>    
+   <div class="col-12 btn-group">
+    <div class="col-6 form-group text-left p-2">
+            <input type="submit" value="Create" class="btn btn-primary" />
+      </div>
+    <div class="col-6 form-group text-right p-2">
+        <a asp-action="Index" class="btn btn-secondary">Back</a>
+    </div>
+    </div>
+  </div> 
+      </form>
+    </div>
+ </div>
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-    
-</>
-</form>
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script type="text/javascript">
+           $(".custom-file-input").on("change", function(){
+               var filename = $this.val().split("\\").pop();
+               $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+           });
+        </script>
+    }
 }
