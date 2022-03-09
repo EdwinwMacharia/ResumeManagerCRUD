@@ -96,14 +96,16 @@
                                @*<input asp-for="@item.YearsWorked" class="form-control" />*@
                            </td>
                             <td>
-                               <button type="button" class="btn btn-sm btn-secondary visible" id="btnadd" onclick="AddItem(this)">Add</button>
-                               <button type="button" class="btn btn-sm btn-danger invisible" id="btnremove">Remove</button>
+                               <button type="button" class="btn btn-sm btn-secondary visible" id="btnadd-@i" onclick="AddItem(this)">Add</button>
+                               <button type="button" class="btn btn-sm btn-danger invisible" id="btnremove-@i" onclick="DeleteItem(this)">Remove</button>
                            </td>
                        </tr>
                    }
                 </tbody>
             </table>   
-     </div>    
+     </div>  
+     
+     <input type="hidden" id="hdnLastIndex" value="0"/>
    <div class="col-12 btn-group">
     <div class="col-6 form-group text-left p-2">
             <input type="submit" value="Create" class="btn btn-primary" />
@@ -125,6 +127,10 @@
                var filename = $this.val().split("\\").pop();
                $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
            });
+
+           function DeleteItem(btn){
+               $(btn).closest('tr').remove();
+           }
 
            function AddItem(btn){
              var table = document.getElementById('ExpTable');
