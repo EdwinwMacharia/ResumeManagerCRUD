@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Resumemanager.Data;
 using Resumemanager.Models;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Resumemanager.Controllers
@@ -9,10 +13,12 @@ namespace Resumemanager.Controllers
     public class ResumeController : Controller
     {
         private readonly ResumeDbContext _context;
+        private readonly IWebHostEnvironment _webHost;
 
-        public ResumeController(ResumeDbContext context)
+        public ResumeController(ResumeDbContext context, IWebHostEnvironment webHost)
         {
             _context = context;
+            _webHost = webHost;
         }
         public IActionResult Index()
         {
@@ -37,6 +43,23 @@ namespace Resumemanager.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index");
 
+        }
+
+        private string GetUploadedFileName(Application applicant)
+        {
+            string uniqueFileName = null;
+
+            if (applicant.ProfilePhoto !=null )
+            {
+                string uploadsFolder = Path.Combine(_webHost.WebRootPath, "images");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + applicant.ProfilePhoto.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var filestream = new FileStream(filePath, FileMode.Create))
+                {
+                    applicant.ProfilePhoto.CopyTo(filestream);
+                }
+                return uniqueFileName;
+            }
         }
     }
 }
