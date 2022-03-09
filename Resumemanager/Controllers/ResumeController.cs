@@ -37,26 +37,30 @@ namespace Resumemanager.Controllers
             //applicant.Experiences.Add(new Experience() { ExperienceId = 3});
             return View(applicant);
         }
+        [HttpPost]
         public IActionResult Create(Application application)
         {
+            string uniqueFileName = GetUploadedFileName(application);
+            application.PhotoUrl = uniqueFileName;
+
            _context.Add(application);
             _context.SaveChanges();
             return RedirectToAction("Index");
 
         }
 
-        private string GetUploadedFileName(Application applicant)
+        private string GetUploadedFileName(Application application)
         {
             string uniqueFileName = null;
 
-            if (applicant.ProfilePhoto !=null )
+            if (application.ProfilePhoto !=null )
             {
                 string uploadsFolder = Path.Combine(_webHost.WebRootPath, "images");
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + applicant.ProfilePhoto.FileName;
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + application.ProfilePhoto.FileName;
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
                 using (var filestream = new FileStream(filePath, FileMode.Create))
                 {
-                    applicant.ProfilePhoto.CopyTo(filestream);
+                    application.ProfilePhoto.CopyTo(filestream);
                 }
                 
             }
