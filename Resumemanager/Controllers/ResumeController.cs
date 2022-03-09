@@ -58,8 +58,9 @@ namespace Resumemanager.Controllers
                 {
                     applicant.ProfilePhoto.CopyTo(filestream);
                 }
-                return uniqueFileName;
+                
             }
+            return uniqueFileName;
         }
     }
 }
